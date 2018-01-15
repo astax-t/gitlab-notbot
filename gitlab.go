@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/xanzy/go-gitlab"
 	"fmt"
+	"net/http"
 )
 
 func PrepareGitLabClient()  {
@@ -12,7 +13,14 @@ func PrepareGitLabClient()  {
 
 func GetAvailableLabels(project project) ([]label, error) {
 	// List all labels
-	labels, _, err := git.Labels.ListLabels(project.Id)
+	labels, _, err := git.Labels.ListLabels(project.Id, func(req *http.Request) error {
+		if req.URL.RawQuery != "" {
+			req.URL.RawQuery = req.URL.RawQuery + "&per_page=100"
+		} else {
+			req.URL.RawQuery = "per_page=100"
+		}
+		return nil
+	})
 	if err != nil {
 		log(LOG_ERROR, "error reading project labels", err)
 		return nil, err
