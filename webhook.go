@@ -31,6 +31,10 @@ type issue struct {
 	Title string `json:"title"`
 }
 
+type user struct {
+	Username string `json:"username"`
+}
+
 var jsonError = errors.New("JSON decoding error")
 var dataError = errors.New("webhook data error")
 
@@ -43,6 +47,7 @@ func (wh *whData) Prepare(body io.Reader, length int64) error {
 		log(LOG_ERROR, fmt.Sprintf("Mismatching data length: expected %v got %v", length, readLen), err)
 		return dataError
 	}
+	//log(LOG_DEBUG, "Full request:\n" + string(bodyStr), nil)
 
 	err = json.Unmarshal(bodyStr[:length], &wh.data)
 	if err != nil {
@@ -103,5 +108,16 @@ func (wh whData) GetIssue() (issue issue, err error) {
 	}
 
 	return issue, nil
+}
+
+func (wh whData) GetUsername() string {
+	var usr user
+	err := json.Unmarshal(*wh.data["user"], &usr)
+	if err != nil {
+		log(LOG_ERROR, "JSON error while getting username of the changer", err)
+		return ""
+	}
+
+	return usr.Username
 }
 

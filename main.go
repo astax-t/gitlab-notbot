@@ -16,6 +16,10 @@ func main() {
 
 	PrepareGitLabClient()
 
+	if config.IgnoreUser == "~" {
+		config.IgnoreUser = GetCurrentUsername()
+	}
+
 	StartServer()
 }
 
@@ -60,6 +64,15 @@ func ProcessRequest(data *whData) {
 		return
 	}
 	log(LOG_DEBUG, "Object kind - " + kind, nil)
+
+	if config.IgnoreUser != "" {
+		author := data.GetUsername()
+		if author == config.IgnoreUser {
+			log(LOG_INFO, "The change is done by ignored user " + author, nil)
+			return
+		}
+		log(LOG_DEBUG, "The change is done by user " + author, nil)
+	}
 
 	/*if !data.LabelsChanged() {
 		log(LOG_INFO, "Labels are unchanged, no need to do anything", nil)

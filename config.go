@@ -15,6 +15,7 @@ type Config struct {
 	GitLabToken string
 	LabelPrefix string
 	LabelColor  string
+	IgnoreUser  string
 }
 
 func (config *Config) loadDefault() {
@@ -24,6 +25,7 @@ func (config *Config) loadDefault() {
 	config.GitLabUrl = "https://gitlab.com/"
 	config.LabelPrefix = "-"
 	config.LabelColor = "#DDDDDD"
+	config.IgnoreUser = "~"
 }
 
 func (config *Config) populate() error {
@@ -36,6 +38,7 @@ func (config *Config) populate() error {
 	config.GitLabToken = getEnvString("GITLAB_TOKEN", config.GitLabToken)
 	config.LabelPrefix = getEnvString("LABEL_PREFIX", config.LabelPrefix)
 	config.LabelColor = getEnvString("LABEL_COLOR", config.LabelColor)
+	config.IgnoreUser = getEnvString("IGNORE_USER", config.IgnoreUser)
 
 	err := config.validate()
 

@@ -85,3 +85,13 @@ func SetIssueLabels(project project, issue issue, labels []label) {
 		log(LOG_DEBUG, "Issue labels successfully updated", nil)
 	}
 }
+
+func GetCurrentUsername() string {
+	user, _, err := git.Users.CurrentUser()
+	if err != nil {
+		log(LOG_FATAL, "Couldn't get current user username (possibly invalid key) -", err)
+	} else {
+		log(LOG_DEBUG, fmt.Sprintf("Surrent user ID is %v", user.Username), nil)
+	}
+	return user.Username
+}

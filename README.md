@@ -5,7 +5,7 @@ There is an [issue (feature)](https://gitlab.com/gitlab-org/gitlab-ce/issues/277
 reported to GitLab requesting to introduce this, but it has been planned,
 rephrased and delayed multiple times.
 
-This service automatically adds "negative" labels for all labels missing from issues.
+This service automatically adds "inverted" labels for all labels missing from issues.
 It does this by listening for issue update webhook and updating the issue labels
 whenever labels change.
 
@@ -33,8 +33,8 @@ defined in environment.
 So the installation steps are the following:
   * Go to your settings in GitLab and click "Access Tokens". Create a new token and
     allow "api" scope access. If you're running a standalone instance of GitLab,
-	it's not a bad idea to create a separate user for this - call it "NotBot",
-	for example and give it "Reporter" right for the GitLab project.
+	it's a good idea to create a separate user for this - call it "NotBot",
+	for example, and give it "Reporter" right for the GitLab project.
   * Put the GitLab URL and the access token into `.env` file.
   * Also you'll probably want to change the value of `LISTEN_HOST` unless you're
     running the bot on the same server as GitLab. Set it to "*" in this case.
@@ -50,8 +50,11 @@ So the installation steps are the following:
   * Currently list of all available labels is fetched for every issue update. This
     works ok for not very busy instances of GitLab, but may be slow on higher load.
   * Only up to 100 project labels are fetched, which leaves only 50 "real" labels
-    which can be effectively used (due to 50 more "negative" labels). But if you
+    which can be effectively used (due to 50 more "inverted" labels). But if you
 	have more than this, probably this bot shouldn't be used as each issue will
 	have too many labels.
   * Perhaps it would be good to have a filter/regexp to restrict which labels are
     included into processing. Some labels may not need "NOT" filter.
+  * Create a command line tool to add the webhook to all projects in a group
+  * Create a command line tool to update all existing or all not closed issues to
+    add the inverted tags
