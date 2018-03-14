@@ -23,6 +23,8 @@ This creates the executable file `$GOPATH/bin/gitlab-notbot[.exe]`. Follow the
 [Cross Compiling guide](http://golangcookbook.com/chapters/running/cross-compiling/)
 if you need to build the binary for a different platform.
 
+Alternatively, download pre-built binaries from github releases in this project.
+
 ## Configuration
 The service uses environment variables and/or `.env` file for configuration. Take
 a look at the example file `.env-example` for the list of available variables. You
